@@ -4,6 +4,15 @@ You hover over a button in a grid of 100. One button changes color. GPUI redraws
 
 This is how to fix it, and what the fix reveals about how GPUI works internally.
 
+## TL;DR
+
+To maintain 60 FPS and low CPU usage:
+
+* ✅ Use `Vec<Entity<T>>`, **not** `Vec<T>`.
+* ✅ Wrap fixed-dimension items in `.cached()` with a `StyleRefinement`.
+* ✅ Use a spawned async interval loop to throttle animation state updates, explicitly notifying the child entities rather than the parent view.
+
+
 ## The Naive Implementation: 100 Buttons, 100 Redraws
 
 ```rust
@@ -180,11 +189,3 @@ By controlling the tick, events are throttled predictably. If ten buttons are ho
 A 100-button grid runs at single-digit FPS out of the box. Frameworks like React, SwiftUI, Flutter, or Elm maintain 60 FPS for identical naive animations.
 
 **GPUI's default path requires developers to actively manage entities, `.cached()`, and tick throttling.** This is not highlighted in the documentation, meaning standard interactions drop performance without clear feedback on why.
-
-## Implementation Guide
-
-To maintain 60 FPS and low CPU usage:
-
-* ✅ Use `Vec<Entity<T>>`, **not** `Vec<T>`.
-* ✅ Wrap fixed-dimension items in `.cached()` with a `StyleRefinement`.
-* ✅ Use a spawned async interval loop to throttle animation state updates, explicitly notifying the child entities rather than the parent view.
