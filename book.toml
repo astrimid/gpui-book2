@@ -1,0 +1,9 @@
+[book]
+authors = ["astrimid"]
+language = "en"
+src = "src"
+title = "GPUI book"
+
+[output.html]
+git-repository-url = "https://github.com/astrimid/gpui-book2"
+preferred-dark-theme = "navy"
